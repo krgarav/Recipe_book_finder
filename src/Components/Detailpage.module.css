@@ -13,14 +13,12 @@
   padding: 2rem 2rem; 
   border: 1px solid transparent; 
   background: linear-gradient(to right, #ff9a9e, #fad0c4); 
-  
   border-image-slice: 1; 
   border-width: 10px; 
   border-color: burlywood;
   position: relative;
 }
 .overlay {
-
   top: 0;
   left: 0;
   width: 100%;

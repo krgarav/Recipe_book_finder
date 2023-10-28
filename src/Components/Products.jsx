@@ -4,12 +4,17 @@ import Carditem from "./Carditem";
 import Container from "react-bootstrap/esm/Container";
 import { Col, Row } from "react-bootstrap";
 const Products = () => {
-  const recipeList = useSelector((state) => state.recipe.recipeList);
+  const savedState = useSelector((state) => state.recipe.savedState);
+  // console.log(savedState);
+  const recipeList = savedState
+    ? useSelector((state) => state.recipe.savedList)
+    : useSelector((state) => state.recipe.recipeList);
+console.log("Products")
+console.log(recipeList)
   const elements = recipeList.map((item, index) => {
     const calories = Math.floor(+item.recipe.calories);
     const length = item.recipe.ingredients.length;
-    console.log(calories,length);
-    
+
     return (
       <Col xs={12} sm={6} md={4} lg={3} key={index}>
         <Carditem
