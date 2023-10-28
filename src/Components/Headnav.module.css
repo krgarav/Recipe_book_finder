@@ -1,3 +1,13 @@
 .head{
     font-size: 1.5rem;
 }
+
+.title{
+    display: flex;
+    text-align: center;
+    align-items: center;
+}
+.icon{
+    margin: 5px;
+    font-size: 2rem;
+}

@@ -1,12 +1,14 @@
-import { Fragment, useState } from "react";
 import Homepage from "./Components/Homepage";
-
-function App() {
-  // const [count, setCount] = useState(0);
-
+import Detailpage from "./Components/Detailpage";
+import { Routes, Route } from "react-router";
+const App = () => {
   return (
-  <Homepage/>
+    <Routes>
+      <Route path="/" element={<Homepage />} />
+      <Route path="/details" element={<Detailpage />} />
+      {/* <Route path="*" element={<Navigate to="/" replace= "true"/>} /> */}
+    </Routes>
   );
-}
+};
 
 export default App;
