@@ -10,17 +10,24 @@ import { BiFoodMenu } from "react-icons/bi";
 import { search } from "../Store/recipe-slice";
 import { recipeAction } from "../Store/recipe-slice";
 import { useNavigate } from "react-router";
+import { useState } from "react";
+import Spinner from "react-bootstrap/Spinner";
+import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 const Headnav = () => {
-  // const [state,setState]=useState();
+  const [show, setShow] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const inputRef = useRef();
-  const savedArrayList = useSelector((state) => state.recipe.savedList);
+  const loadingState = useSelector((state) => state.recipe.loading);
   const searchHandler = () => {
+    dispatch(recipeAction.setRecipeList([]));
+    setShow(false);
     const searchInput = inputRef.current.value;
-    console.log("clicked")
+    console.log("clicked");
     dispatch(search(searchInput));
     dispatch(recipeAction.setSavedState(false));
+    setShow(true);
   };
 
   const savedRecipesHandler = () => {
@@ -29,23 +36,39 @@ const Headnav = () => {
       : [];
     if (savedItems.length > 0) {
       const savedList = JSON.parse(savedItems);
-      console.log(savedList);
 
       dispatch(recipeAction.setSavedList(savedList));
     }
     dispatch(recipeAction.setSavedState(true));
-    navigate("/",{replace:true});
-    
+    navigate("/", { replace: true });
+    setShow(false);
+  };
+
+  const handleBrandClick = () => {
+    dispatch(recipeAction.setRecipeList([]));
+    dispatch(recipeAction.setSavedList([]));
+    dispatch(recipeAction.setSavedState(false));
+    setShow(true);
+    // navigate('/',{replace:true})
+    console.log("Navbar.Brand clicked!");
   };
   return (
     <Navbar expand="lg" className="bg-body-tertiary" sticky="top">
-      <Container fluid>
-        <Navbar.Brand href="#">
+      <Container className={classes.container} fluid>
+        <NavLink to="/" className={classes.navLink} onClick={handleBrandClick}>
+          <Navbar.Brand>
+            <span className={classes.title}>
+              <BiFoodMenu className={classes.icon} />
+              <h3 className={classes.head}>Recipe Book</h3>
+            </span>
+          </Navbar.Brand>
+        </NavLink>
+        {/* <Navbar.Brand to="/" as={NavLink} onClick={handleBrandClick}>
           <span className={classes.title}>
             <BiFoodMenu className={classes.icon} />
             <h3 className={classes.head}>Recipe Book</h3>
           </span>
-        </Navbar.Brand>
+        </Navbar.Brand> */}
         <Form className="d-flex mx-auto" style={{ width: "50%" }}>
           <Form.Control
             type="search"
@@ -53,13 +76,32 @@ const Headnav = () => {
             className="me-2"
             aria-label="Search"
             ref={inputRef}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                searchHandler();
+                inputRef.current.blur();
+              }
+            }}
           />
-          <Button onClick={searchHandler} variant="outline-success">
-            Search
+          <Button
+            onClick={searchHandler}
+            disabled={loadingState}
+            variant="outline-success"
+          >
+            {loadingState && <span>Searching...</span>}
+            {!loadingState && <span>Search</span>}
+            {/* <span>Search</span> */}
           </Button>
         </Form>
 
-        <Button onClick={savedRecipesHandler}>Saved Recipes</Button>
+        <Button
+          className={classes.savebtn}
+          onClick={savedRecipesHandler}
+          disabled={!show}
+        >
+          Saved Recipes
+        </Button>
       </Container>
     </Navbar>
   );

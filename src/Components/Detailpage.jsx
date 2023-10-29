@@ -1,10 +1,24 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import Headnav from "./Headnav";
 import classes from "./Detailpage.module.css";
+import { useDispatch } from "react-redux";
+import { recipeAction } from "../Store/recipe-slice";
 const Detailpage = () => {
+  const dispatch = useDispatch();
+  // useEffect(()=>{
+  //   const localStorageItem = localStorage.getItem("saveditems");
+  //   const prevList = localStorageItem
+  //     ? JSON.parse(localStorage.getItem("saveditems"))
+  //     : [];
+  //     console.log(prevList)
+  //     dispatch(recipeAction.setDetailPage(prevList));
+
+  // },[])
+  const [show, setShow] = useState(true);
   const recipeList = useSelector((state) => state.recipe.detailPage);
+  
   const ingredientList = recipeList.recipe.ingredients.map((item, index) => {
     return <li key={index}>{item.text}</li>;
   });
@@ -39,6 +53,7 @@ const Detailpage = () => {
     // console.log(JSON.parse(stringifiedArray));
     localStorage.setItem("saveditems", stringifiedArray);
     // console.log(recipeList.recipe)
+    setShow(false);
   };
 
   return (
@@ -47,13 +62,19 @@ const Detailpage = () => {
       <br />
       <Container style={containerStyle} className={classes.container}>
         <div className={classes.overlay}>
-          <div className={classes.firstbox} style={{ display: "flex" }}>
+          <Container className={classes.firstbox} >
             <img src={recipeList.recipe.image} />
-            <div>
+            <div style={{ textAlign: "center" }}>
               <h3>{recipeList.recipe.label}</h3>
-              <Button onClick={saveHandler}>Save</Button>
+              <Button
+                style={{ margin: "20px" }}
+                disabled={!show}
+                onClick={saveHandler}
+              >
+                Save
+              </Button>
             </div>
-          </div>
+          </Container>
 
           <br />
           <div className={classes.secondbox}>

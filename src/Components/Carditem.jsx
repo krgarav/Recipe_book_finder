@@ -19,7 +19,7 @@ const Carditem = (props) => {
     <Card
       className={classes.card}
       onClick={handleCardClick}
-      style={{ width: "16rem", margin: "10px", height: "28rem" }}
+      style={{ margin: "1rem"}}
     >
       {props.image && !imageLoaded ? (
         <Spinner
