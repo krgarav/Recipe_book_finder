@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef, useLayoutEffect } from "react";
 import { Button, Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import Headnav from "./Headnav";
@@ -16,9 +16,21 @@ const Detailpage = () => {
   //     dispatch(recipeAction.setDetailPage(prevList));
 
   // },[])
+  const myElementRef = useRef(null);
+
+  useLayoutEffect(() => {
+    // Set focus to the element when the component mounts
+    window.scrollTo(0, 0);
+    // myElementRef.current.focus();
+  }, []); //
+  // useEffect(() => {
+  //   // Set focus to the element when the component mounts
+  //   myElementRef.current.focus();
+  // }, []); // Empty dependency array ensures that this effect runs once, similar to componentDidMount
+
   const [show, setShow] = useState(true);
   const recipeList = useSelector((state) => state.recipe.detailPage);
-  
+
   const ingredientList = recipeList.recipe.ingredients.map((item, index) => {
     return <li key={index}>{item.text}</li>;
   });
@@ -48,6 +60,7 @@ const Detailpage = () => {
     const savedItems = [...prevList];
     // if (recipeList.length > 0) {
     savedItems.push(recipeList);
+    console.log("save clicked");
     // }
     const stringifiedArray = JSON.stringify(savedItems);
     // console.log(JSON.parse(stringifiedArray));
@@ -62,8 +75,11 @@ const Detailpage = () => {
       <br />
       <Container style={containerStyle} className={classes.container}>
         <div className={classes.overlay}>
-          <Container className={classes.firstbox} >
-            <img src={recipeList.recipe.image} />
+          <Container className={classes.firstbox}>
+            <div  >
+              <img src={recipeList.recipe.image} />
+            </div>
+
             <div style={{ textAlign: "center" }}>
               <h3>{recipeList.recipe.label}</h3>
               <Button
